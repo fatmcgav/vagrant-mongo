@@ -1,0 +1,5 @@
+# Repos APT
+mongodb_repo_location: 'http://downloads-distro.mongodb.org/repo/debian-sysvinit'
+mongodb_repo_release: 'dist'
+mongodb_repo_repos: '10gen'
+mongodb_repo_key: '9ECBEC467F0CEB10'

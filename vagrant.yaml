@@ -1,0 +1,16 @@
+---
+domain: company.lan
+image: puppetlabs/debian-7.8-64-puppet
+provider: vbox
+autostart: true
+memory: 512
+cpu: 1
+#apt_cacher_url: 'http://10.20.3.201:3142'
+#puppetmaster: puppet
+hosts:
+  - name: arbiter
+    ip: 192.168.33.13
+  - name: secondary
+    ip: 192.168.33.12
+  - name: primary
+    ip: 192.168.33.11
