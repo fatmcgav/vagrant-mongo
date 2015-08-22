@@ -5,7 +5,7 @@
 :logger: console
 
 :hierarchy:
-  - "fqdn/%{::fqdn}"
+  - "hostname/%{::hostname}"
   - "common"
 
 :yaml:

@@ -1,0 +1,21 @@
+---
+mongodb::server::auth: true
+mongodb::server::create_admin: true
+mongodb::server::admin_username: admin
+mongodb::server::admin_password: password
+mongodb_replset:
+  rsmain:
+    ensure: present
+    auth_enabled: true
+    members:
+      - "primary.%{::domain}:27017"
+      - "secondary.%{::domain}:27017"
+      - "arbiter.%{::domain}:27017"
+    arbiter:
+      "arbiter.%{::domain}:27017"
+mongodb_db:
+  db1:
+    user: db1_user
+    password: password
+    roles:
+      - dbOwner

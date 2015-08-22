@@ -15,9 +15,9 @@ class company::profile::mongo_replset {
   } ->
 
   class { 'mongodb::globals':
-  } ->
+  }
   class { 'mongodb::server':
-  } ->
+  }
   class { 'mongodb::client': }
 
   $mongodb_db = hiera_hash('mongodb_db', false)
@@ -37,5 +37,5 @@ class company::profile::mongo_replset {
     create_resources('mongodb_replset', $mongodb_replset)
   }
 
-  Apt::Source['downloads-distro.mongodb.org'] -> Package <| |>
+  Apt::Source['downloads-distro.mongodb.org'] -> Exec['apt_update'] -> Package <| |>
 }

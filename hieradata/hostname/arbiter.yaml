@@ -1,0 +1,2 @@
+---
+mongodb::server::nojournal: 'true'

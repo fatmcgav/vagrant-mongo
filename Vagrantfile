@@ -1,5 +1,6 @@
 require 'yaml'
-required_plugins = %w(vagrant-hostmanager)
+# required_plugins = %w(vagrant-hostmanager)
+required_plugins = %w(  )
 VAGRANTFILE_API_VERSION = '2'
 
 def node_val(node, config, sym)
@@ -55,6 +56,16 @@ if ARGV.include?('--provider=libvirt') ||
   provider = 'libvirt'
 end
 
+if ARGV.include?('--provider=parallels') ||
+  (!has_provider_arg &&
+   ENV['VAGRANT_DEFAULT_PROVIDER'] == 'parallels') ||
+  (!has_provider_arg &&
+   val(main_config, :provider) == 'parallels')
+
+  required_plugins << 'vagrant-parallels'
+  provider = 'parallels'
+end
+
 if provider != 'virtualbox' && ARGV.include?('up')
   if not ARGV.include?('--no-parallel')
     puts "You really want the machine not to be started in parallel. Please rerun with --no-parallel argument. #{provider}"
@@ -76,13 +87,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
   end
 
-  config.hostmanager.enabled = true
-  config.hostmanager.manage_host = true
-  config.hostmanager.ignore_private_ip = false
-  config.hostmanager.include_offline = true
+  if Vagrant.has_plugin?('vagrant-hostmanager')
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.ignore_private_ip = false
+    config.hostmanager.include_offline = true
+  end
+
+  if Vagrant.has_plugin?('landrush')
+    config.landrush.enabled = true
+    # config.landrush.upstream '172.30.16.200'
+    config.landrush.upstream '192.168.1.254'
+    config.landrush.tld = "#{val(main_config, :domain)}"
+  end
 
   config.vm.box = "#{val(main_config, :image)}"
 
+  # Install Puppet
+  config.puppet_install.puppet_version = '3.7.5'
 
   ## Hosts configuration
   main_config['hosts'].each_with_index do |node, index|
@@ -95,6 +117,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         client_config.vm.provider :libvirt do |os_client, override|
           override.vm.network :private_network, ip: "#{node['ip']}",
             :libvirt__network_name => 'private_network'
+          os_client.memory = node_val(node, main_config, :memory)
+          os_client.cpus = node_val(node, main_config, :cpu)
+        end
+      end
+      if provider == 'parallels'
+        client_config.vm.provider :parallels do |os_client, override|
+          # Create a private network, which allows host-only access to the machine
+          # using a specific IP.
+          override.vm.network :private_network, ip: "#{node['ip']}"
           os_client.memory = node_val(node, main_config, :memory)
           os_client.cpus = node_val(node, main_config, :cpu)
         end

@@ -1,7 +1,9 @@
 ---
-domain: company.lan
-image: puppetlabs/debian-7.8-64-puppet
-provider: vbox
+domain: lt0772.local
+# image: puppetlabs/debian-7.8-64-puppet
+image: parallels/debian-7.8
+# provider: vagrant
+provider: parallels
 autostart: true
 memory: 512
 cpu: 1
