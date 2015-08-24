@@ -22,11 +22,7 @@ class company::profile::mongo_replset {
 
   $mongodb_db = hiera_hash('mongodb_db', false)
   if $mongodb_db {
-    create_resources('mongodb::db', $mongodb_db)
-  }
-  $mongodb_database = hiera_hash('mongodb_database', false)
-  if $mongodb_database {
-    create_resources('mongodb_database', $mongodb_database)
+    create_resources('::mongodb::db', $mongodb_db)
   }
   $mongodb_user = hiera_hash('mongodb_user', false)
   if $mongodb_user {
@@ -34,7 +30,10 @@ class company::profile::mongo_replset {
   }
   $mongodb_replset = hiera_hash('mongodb_replset', false)
   if $mongodb_replset {
-    create_resources('mongodb_replset', $mongodb_replset)
+    # create_resources('::mongodb::replset', $mongodb_replset)
+    class {'::mongodb::replset':
+      sets => $mongodb_replset
+    }
   }
 
   Apt::Source['downloads-distro.mongodb.org'] -> Exec['apt_update'] -> Package <| |>
