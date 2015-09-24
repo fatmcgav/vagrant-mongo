@@ -28,13 +28,9 @@ class company::profile::mongo_replset {
   }
   $mongodb_replset = hiera_hash('mongodb_replset', false)
   if $mongodb_replset {
-    # create_resources('::mongodb::replset', $mongodb_replset)
     class {'::mongodb::replset':
       sets => $mongodb_replset
     }
-    # Class <| title == 'mongodb::server' |> {
-    #   replica_sets => $mongodb_replset
-    # }
   }
 
   Apt::Source['downloads-distro.mongodb.org'] -> Exec['apt_update'] -> Package <| |>
