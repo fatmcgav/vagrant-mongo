@@ -96,8 +96,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   if Vagrant.has_plugin?('landrush')
     config.landrush.enabled = true
-    # config.landrush.upstream '172.30.16.200'
-    config.landrush.upstream '192.168.1.254'
+    config.landrush.upstream '172.30.16.200'
+    # config.landrush.upstream '192.168.1.254'
     config.landrush.tld = "#{val(main_config, :domain)}"
   end
 

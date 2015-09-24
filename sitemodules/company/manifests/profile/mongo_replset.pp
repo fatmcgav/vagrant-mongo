@@ -12,13 +12,11 @@ class company::profile::mongo_replset {
     key         => hiera('mongodb_repo_key'),
     key_source  => '/tmp/mongodb_key.asc',
     include_src => false,
-  } ->
+  }
 
-  class { 'mongodb::globals':
-  }
-  class { 'mongodb::server':
-  }
-  class { 'mongodb::client': }
+  include 'mongodb::globals'
+  include 'mongodb::server'
+  include 'mongodb::client'
 
   $mongodb_db = hiera_hash('mongodb_db', false)
   if $mongodb_db {
@@ -34,6 +32,9 @@ class company::profile::mongo_replset {
     class {'::mongodb::replset':
       sets => $mongodb_replset
     }
+    # Class <| title == 'mongodb::server' |> {
+    #   replica_sets => $mongodb_replset
+    # }
   }
 
   Apt::Source['downloads-distro.mongodb.org'] -> Exec['apt_update'] -> Package <| |>
