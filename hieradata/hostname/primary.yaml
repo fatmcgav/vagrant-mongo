@@ -1,8 +1,5 @@
 ---
-mongodb::server::auth: true
 mongodb::server::create_admin: true
-mongodb::server::admin_username: 'admin'
-mongodb::server::admin_password: 'password'
 mongodb_replset:
   rsmain:
     ensure: present

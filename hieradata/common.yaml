@@ -42,4 +42,7 @@ mongodb::server::key: |
   TGLiPPA4q7tESQWqiLwFAhobp1UCm++FA5JPORIXHJFoLo2dqUjO7Yb0b04dfkMk
   t8SqPGsFc7BC29YbahrnXGM3uRkk
 mongodb::server::replset: rsmain
+mongodb::server::auth: true
+mongodb::server::admin_username: 'admin'
+mongodb::server::admin_password: 'password'
 mongodb::server::store_creds: true

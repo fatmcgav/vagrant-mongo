@@ -1,4 +1,1 @@
 ---
-mongodb::server::auth: true
-mongodb::server::admin_username: admin
-mongodb::server::admin_password: password
